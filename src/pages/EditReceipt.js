@@ -94,13 +94,21 @@ const EditReceipt = () => {
     setSuccess(false);
 
     try {
+      // Ensure all items have a category
+      const processedItems = items.map(item => {
+        if (!item.category) {
+          return { ...item, category: 'Uncategorized' };
+        }
+        return item;
+      });
+
       // Prepare updated receipt data
       const updatedData = {
         cashierName,
         managerName,
         paymentMethod,
         discount: parseFloat(discount) || 0,
-        items,
+        items: processedItems,
         totalAmount: parseFloat(calculateTotal())
       };
 
