@@ -4,7 +4,9 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
-  updatePassword
+  updatePassword,
+  GoogleAuthProvider,
+  signInWithPopup
 } from 'firebase/auth';
 import { doc, setDoc, getDoc, updateDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { auth, db } from '../firebase/config';
@@ -186,6 +188,38 @@ export function AuthProvider({ children }) {
       });
   }
 
+  // Sign in with Google
+  function loginWithGoogle() {
+    const provider = new GoogleAuthProvider();
+    return signInWithPopup(auth, provider)
+      .then(async (result) => {
+        const user = result.user;
+        const userRef = doc(db, 'shops', user.uid);
+        const userDoc = await getDoc(userRef);
+        
+        // If this is the first time signing in with Google
+        if (!userDoc.exists()) {
+          // Create a new shop document for this Google user
+          await setDoc(userRef, {
+            userEmail: user.email,
+            displayName: user.displayName || '',
+            photoURL: user.photoURL || '',
+            createdAt: new Date().toISOString(),
+            lastLoginAt: new Date().toISOString(),
+            accountStatus: 'active',
+            authProvider: 'google'
+          });
+        } else {
+          // Update last login time
+          await updateDoc(userRef, {
+            lastLoginAt: new Date().toISOString()
+          });
+        }
+        
+        return result;
+      });
+  }
+
   const value = {
     currentUser,
     shopData,
@@ -194,7 +228,8 @@ export function AuthProvider({ children }) {
     logout,
     getShopData,
     changePassword,
-    updateShopData
+    updateShopData,
+    loginWithGoogle
   };
 
   return (
