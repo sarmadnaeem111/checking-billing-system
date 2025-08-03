@@ -6,6 +6,18 @@ service cloud.firestore {
       allow read, write: if false;
     }
     
+    // Admin notifications collection - only admins can access
+    match /adminNotifications/{notificationId} {
+      // Only admins can read notifications
+      allow read: if request.auth != null && 
+                  exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+      // Allow creation of notifications by any authenticated user (for Google sign-up notifications)
+      allow create: if request.auth != null;
+      // Only admins can update or delete notifications
+      allow update, delete: if request.auth != null && 
+                            exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+    
     // Admin collection - only authenticated admins can access
     match /admins/{adminId} {
       // Only allow read if the user is authenticated and is the admin being accessed
