@@ -12,7 +12,8 @@ import {
   query, 
   where, 
   updateDoc,
-  orderBy
+  orderBy,
+  FieldPath
 } from 'firebase/firestore';
 import { auth, db } from '../firebase/config';
 
@@ -118,25 +119,54 @@ export function AdminProvider({ children }) {
       const usersRef = collection(db, 'shops');
       console.log("Created collection reference to shops");
       
+      // Query for both status and accountStatus fields to handle both regular and Google sign-ups
       const q = query(
         usersRef, 
-        where('status', '==', 'pending')
+        where(new FieldPath('status'), '==', 'pending')
       );
-      console.log("Created query for pending status");
+      const q2 = query(
+        usersRef, 
+        where(new FieldPath('accountStatus'), '==', 'pending')
+      );
+      console.log("Created queries for pending status");
       
-      const snapshot = await getDocs(q);
-      console.log(`Query returned ${snapshot.docs.length} documents`);
+      // Get results from both queries
+      const snapshot1 = await getDocs(q);
+      const snapshot2 = await getDocs(q2);
+      console.log(`Query 1 returned ${snapshot1.docs.length} documents`);
+      console.log(`Query 2 returned ${snapshot2.docs.length} documents`);
       
-      const users = snapshot.docs
-        .map(doc => {
-          const data = doc.data();
-          console.log(`Processing document: ${doc.id}`, data);
-          return {
-            id: doc.id,
-            email: data.userEmail || data.email || 'No email available',
-            ...data
-          };
-        })
+      // Combine results from both queries, avoiding duplicates by using a Map with document ID as key
+      const userMap = new Map();
+      
+      // Process documents from first query (status == 'pending')
+      snapshot1.docs.forEach(doc => {
+        const data = doc.data();
+        console.log(`Processing document from query 1: ${doc.id}`, data);
+        userMap.set(doc.id, {
+          id: doc.id,
+          email: data.userEmail || data.email || 'No email available',
+          ...data
+        });
+      });
+      
+      // Process documents from second query (accountStatus == 'pending')
+      snapshot2.docs.forEach(doc => {
+        // Skip if already added from first query
+        if (userMap.has(doc.id)) return;
+        
+        const data = doc.data();
+        console.log(`Processing document from query 2: ${doc.id}`, data);
+        userMap.set(doc.id, {
+          id: doc.id,
+          email: data.userEmail || data.email || 'No email available',
+          shopName: data.shopName || data.displayName || 'Unknown Shop', // Handle Google users that might not have shopName
+          ...data
+        });
+      });
+      
+      // Convert Map to array and sort by creation date
+      const users = Array.from(userMap.values())
         .sort((a, b) => {
           if (!a.createdAt) return 1;
           if (!b.createdAt) return -1;
@@ -150,6 +180,45 @@ export function AdminProvider({ children }) {
       console.error('Error details:', error.code, error.message);
       // Return empty array instead of throwing
       return [];
+    }
+  }
+
+  // Get admin notifications
+  async function getAdminNotifications() {
+    try {
+      console.log("Fetching admin notifications");
+      
+      // Query the adminNotifications collection
+      const notificationsRef = collection(db, 'adminNotifications');
+      const notificationsQuery = query(
+        notificationsRef,
+        orderBy('createdAt', 'desc')
+      );
+      
+      const snapshot = await getDocs(notificationsQuery);
+      
+      return snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+        createdAt: doc.data().createdAt
+      }));
+    } catch (error) {
+      console.error("Error fetching admin notifications:", error);
+      throw error;
+    }
+  }
+  
+  // Mark notification as read
+  async function markNotificationAsRead(notificationId) {
+    try {
+      const notificationRef = doc(db, 'adminNotifications', notificationId);
+      await updateDoc(notificationRef, {
+        read: true
+      });
+      return true;
+    } catch (error) {
+      console.error("Error marking notification as read:", error);
+      throw error;
     }
   }
 
@@ -239,10 +308,25 @@ export function AdminProvider({ children }) {
   // Approve user registration
   async function approveUser(userId) {
     try {
-      await updateDoc(doc(db, 'shops', userId), {
-        status: 'approved',
+      // First check which status field the user has
+      const userDoc = await getDoc(doc(db, 'shops', userId));
+      if (!userDoc.exists()) {
+        throw new Error('User document not found');
+      }
+      
+      const userData = userDoc.data();
+      const updateData = {
         approvedAt: new Date().toISOString()
-      });
+      };
+      
+      // Update the appropriate status field
+      if (userData.hasOwnProperty('accountStatus')) {
+        updateData.accountStatus = 'approved';
+      } else {
+        updateData.status = 'approved';
+      }
+      
+      await updateDoc(doc(db, 'shops', userId), updateData);
       return true;
     } catch (error) {
       console.error('Error approving user:', error);
@@ -253,10 +337,25 @@ export function AdminProvider({ children }) {
   // Reject user registration
   async function rejectUser(userId) {
     try {
-      await updateDoc(doc(db, 'shops', userId), {
-        status: 'rejected',
+      // First check which status field the user has
+      const userDoc = await getDoc(doc(db, 'shops', userId));
+      if (!userDoc.exists()) {
+        throw new Error('User document not found');
+      }
+      
+      const userData = userDoc.data();
+      const updateData = {
         rejectedAt: new Date().toISOString()
-      });
+      };
+      
+      // Update the appropriate status field
+      if (userData.hasOwnProperty('accountStatus')) {
+        updateData.accountStatus = 'rejected';
+      } else {
+        updateData.status = 'rejected';
+      }
+      
+      await updateDoc(doc(db, 'shops', userId), updateData);
       return true;
     } catch (error) {
       console.error('Error rejecting user:', error);
@@ -267,10 +366,25 @@ export function AdminProvider({ children }) {
   // Freeze/unfreeze user account
   async function toggleUserFreeze(userId, freeze) {
     try {
-      await updateDoc(doc(db, 'shops', userId), {
-        status: freeze ? 'frozen' : 'approved',
+      // First check which status field the user has
+      const userDoc = await getDoc(doc(db, 'shops', userId));
+      if (!userDoc.exists()) {
+        throw new Error('User document not found');
+      }
+      
+      const userData = userDoc.data();
+      const updateData = {
         lastStatusChange: new Date().toISOString()
-      });
+      };
+      
+      // Update the appropriate status field
+      if (userData.hasOwnProperty('accountStatus')) {
+        updateData.accountStatus = freeze ? 'frozen' : 'approved';
+      } else {
+        updateData.status = freeze ? 'frozen' : 'approved';
+      }
+      
+      await updateDoc(doc(db, 'shops', userId), updateData);
       return true;
     } catch (error) {
       console.error(`Error ${freeze ? 'freezing' : 'unfreezing'} user:`, error);
@@ -359,6 +473,9 @@ export function AdminProvider({ children }) {
     approveUser,
     rejectUser,
     toggleUserFreeze,
+    getAdminNotifications,
+    markNotificationAsRead,
+    loading,
     error,
     setError,
     // Debug props
