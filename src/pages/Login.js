@@ -4,13 +4,15 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { doc, getDoc, updateDoc, serverTimestamp, collection, query, where, getDocs, limit } from 'firebase/firestore';
 import { db } from '../firebase/config';
+import { FcGoogle } from 'react-icons/fc';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const [googleLoading, setGoogleLoading] = useState(false);
+  const { login, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -138,6 +140,21 @@ const Login = () => {
     }
   };
 
+  const handleGoogleSignIn = async () => {
+    setError('');
+    setGoogleLoading(true);
+    
+    try {
+      await loginWithGoogle();
+      navigate('/dashboard');
+    } catch (err) {
+      console.error(err);
+      setError(err.message || 'Failed to sign in with Google');
+    }
+    
+    setGoogleLoading(false);
+  };
+
   return (
     <Container className="py-5 h-100">
       <Row className="justify-content-center align-items-center h-100">
@@ -178,11 +195,26 @@ const Login = () => {
                     type="submit" 
                     size="lg"
                     disabled={loading}
+                    className="mb-3"
                   >
                     {loading ? 'Signing In...' : 'Sign In'}
                   </Button>
                 </div>
               </Form>
+              
+              <div className="d-grid mt-3">
+                <Button 
+                  variant="light" 
+                  size="lg"
+                  onClick={handleGoogleSignIn}
+                  disabled={googleLoading}
+                  className="d-flex align-items-center justify-content-center"
+                  style={{ border: '1px solid #ccc' }}
+                >
+                  <FcGoogle size={24} className="me-2" />
+                  {googleLoading ? 'Signing In...' : 'Sign in with Google'}
+                </Button>
+              </div>
               
               <div className="text-center mt-4">
                 <div className="mb-3">
