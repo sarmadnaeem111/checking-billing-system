@@ -149,7 +149,15 @@ const Login = () => {
       navigate('/dashboard');
     } catch (err) {
       console.error(err);
-      setError(err.message || 'Failed to sign in with Google');
+      
+      // Display specific error messages for pending/rejected accounts
+      if (err.message.includes('pending approval') || 
+          err.message.includes('rejected') || 
+          err.message.includes('frozen')) {
+        setError(err.message);
+      } else {
+        setError('Failed to sign in with Google. ' + err.message);
+      }
     }
     
     setGoogleLoading(false);
