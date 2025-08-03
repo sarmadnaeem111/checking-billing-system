@@ -293,6 +293,7 @@ const ReturnProducts = () => {
                 <thead>
                   <tr>
                     <th>Item</th>
+                    <th>Category</th>
                     <th>Quantity</th>
                     <th>Price</th>
                     <th>Total</th>
@@ -302,6 +303,7 @@ const ReturnProducts = () => {
                   {receipt.returnInfo.returnedItems.map((item, index) => (
                     <tr key={index}>
                       <td>{item.name}</td>
+                      <td>{item.category || 'Uncategorized'}</td>
                       <td>{item.quantity}</td>
                       <td>{formatCurrency(item.price)}</td>
                       <td>{formatCurrency(item.total)}</td>
@@ -330,6 +332,7 @@ const ReturnProducts = () => {
                     <tr>
                       <th>Return</th>
                       <th>Item</th>
+                      <th>Category</th>
                       <th>Price</th>
                       <th>Original Qty</th>
                       <th>Return Qty</th>
@@ -347,6 +350,7 @@ const ReturnProducts = () => {
                           />
                         </td>
                         <td>{item.name}</td>
+                        <td>{item.category || 'Uncategorized'}</td>
                         <td>{formatCurrency(item.price)}</td>
                         <td>{item.quantity} {item.quantityUnit === 'kg' ? 'KG' : ''}</td>
                         <td>
