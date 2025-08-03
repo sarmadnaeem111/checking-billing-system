@@ -245,7 +245,7 @@ const ViewReceipts = () => {
                           <td data-label={getTranslatedAttr("receiptCashier")}>{receipt.cashierName}</td>
                           <td data-label={getTranslatedAttr("receiptItems")} className="item-column">
                             <div className="item-cell-content">
-                              {receipt.items.map(item => item.name).join(', ')}
+                              {receipt.items.map(item => `${item.name} (${item.category || 'Uncategorized'})`).join(', ')}
                             </div>
                           </td>
                           <td data-label={getTranslatedAttr("totalAmount")}>{formatCurrency(receipt.totalAmount)}</td>
