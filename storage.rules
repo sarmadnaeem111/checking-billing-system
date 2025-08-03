@@ -1,0 +1,40 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Default deny all access
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+    
+    // Admin access to all files
+    match /{allPaths=**} {
+      allow read, write: if request.auth != null && 
+                          exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+    
+    // User profile images - users can upload their own profile images
+    match /users/{userId}/profile/{fileName} {
+      // Users can read and write their own profile images
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      // Everyone can read profile images
+      allow read: if true;
+    }
+    
+    // Shop images - users can upload images for their own shops
+    match /shops/{shopId}/images/{fileName} {
+      // Users can read and write their own shop images
+      allow read, write: if request.auth != null && request.auth.uid == shopId;
+      // Everyone can read shop images
+      allow read: if true;
+    }
+    
+    // Product images - only admins can upload product images
+    match /products/{productId}/images/{fileName} {
+      // Admins can read and write all product images
+      allow read, write: if request.auth != null && 
+                          exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+      // Everyone can read product images
+      allow read: if true;
+    }
+  }
+}

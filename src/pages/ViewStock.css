@@ -1,0 +1,101 @@
+/* Responsive table styling */
+.stock-table {
+  width: 100%;
+  margin-bottom: 1rem;
+  border-collapse: collapse;
+}
+
+.stock-table th {
+  font-weight: 600;
+  vertical-align: middle;
+}
+
+.stock-table td {
+  vertical-align: middle;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.description-column {
+  max-width: 200px;
+}
+
+.description-cell-content {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+.text-nowrap {
+  white-space: nowrap;
+}
+
+/* Mobile responsive styles */
+@media screen and (max-width: 767px) {
+  .stock-table {
+    border: 0;
+  }
+  
+  .stock-table thead {
+    border: none;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+  
+  .stock-table tr {
+    border-bottom: 3px solid #ddd;
+    display: block;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    border-radius: 4px;
+    padding: 0.5rem 0;
+  }
+  
+  .stock-table td {
+    border-bottom: 1px solid #ddd;
+    display: block;
+    font-size: 0.9rem;
+    text-align: right;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .stock-table td::before {
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+  }
+  
+  .stock-table td:last-child {
+    border-bottom: 0;
+    text-align: center;
+  }
+  
+  .stock-table td:last-child::before {
+    display: none;
+  }
+  
+  .description-cell-content {
+    white-space: normal;
+    max-width: 100%;
+  }
+  
+  .stock-table-container {
+    overflow-x: hidden;
+  }
+  
+  /* Make buttons a bit larger on mobile for touch */
+  .stock-table .btn {
+    padding: 0.375rem 0.75rem;
+    margin: 0.2rem;
+  }
+} 

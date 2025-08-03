@@ -1,0 +1,25 @@
+.expense-table td {
+  vertical-align: middle;
+}
+
+.expense-table small {
+  display: block;
+  margin-top: 4px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .expense-table {
+    font-size: 0.875rem;
+  }
+  
+  .expense-table td, 
+  .expense-table th {
+    padding: 0.5rem;
+  }
+  
+  .expense-table .btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
+}

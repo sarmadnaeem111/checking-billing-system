@@ -1,0 +1,104 @@
+/* Responsive table styling for attendance */
+.attendance-table {
+  width: 100%;
+  margin-bottom: 1rem;
+  border-collapse: collapse;
+}
+
+.attendance-table th {
+  font-weight: 600;
+  vertical-align: middle;
+}
+
+.attendance-table td {
+  vertical-align: middle;
+}
+
+.text-nowrap {
+  white-space: nowrap;
+}
+
+.notes-cell {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Mobile responsive styles */
+@media screen and (max-width: 767px) {
+  .attendance-table {
+    border: 0;
+  }
+  
+  .attendance-table thead {
+    border: none;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+  
+  .attendance-table tr {
+    border-bottom: 3px solid #ddd;
+    display: block;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    border-radius: 4px;
+    padding: 0.5rem 0;
+    background-color: #fff;
+  }
+  
+  .attendance-table tr:nth-of-type(even) {
+    background-color: #f8f9fa;
+  }
+  
+  .attendance-table td {
+    border-bottom: 1px solid #ddd;
+    display: block;
+    font-size: 0.9rem;
+    text-align: right;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .attendance-table td::before {
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+  }
+  
+  .attendance-table td:last-child {
+    border-bottom: 0;
+  }
+  
+  .notes-cell {
+    max-width: 100%;
+    white-space: normal;
+  }
+  
+  /* Filter controls on mobile */
+  @media screen and (max-width: 576px) {
+    .attendance-filters {
+      flex-direction: column;
+    }
+    
+    .attendance-filters > div {
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+    
+    .generate-report-btn {
+      width: 100%;
+      margin-top: 0.5rem;
+    }
+  }
+  
+  .attendance-table-container {
+    overflow-x: hidden;
+  }
+} 

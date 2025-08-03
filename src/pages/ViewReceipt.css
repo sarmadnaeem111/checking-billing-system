@@ -1,0 +1,96 @@
+/* ViewReceipt responsive styles */
+.receipt-header {
+  margin-bottom: 1.5rem;
+}
+
+.receipt-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.receipt-container {
+  overflow-x: auto;
+}
+
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .receipt-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .receipt-buttons {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .receipt-buttons .btn {
+    padding: 0.375rem 0.5rem;
+    font-size: 0.875rem;
+  }
+  
+  .receipt-table {
+    min-width: 100%;
+    font-size: 0.85rem;
+  }
+  
+  .receipt-table th,
+  .receipt-table td {
+    padding: 0.5rem 0.25rem;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 576px) {
+  .receipt-buttons {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+  
+  .receipt-buttons .btn {
+    margin-bottom: 0.5rem;
+    min-width: 48%;
+    text-align: center;
+  }
+  
+  .size-controls-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .size-controls-form .form-label {
+    margin-bottom: 0.5rem;
+  }
+  
+  .receipt-container .table-responsive {
+    margin: 0 -1rem;
+    padding: 0 1rem;
+    width: calc(100% + 2rem);
+  }
+}
+
+/* Added to ensure PDF and printing still work correctly */
+@media print {
+  .receipt-header, 
+  .receipt-buttons,
+  .size-controls-form {
+    display: none;
+  }
+  
+  .receipt-container {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+  
+  .receipt-table {
+    width: 100% !important;
+  }
+} 

@@ -1,0 +1,100 @@
+/* Responsive styles for Attendance Report page */
+
+/* Base styles */
+.report-table {
+  width: 100%;
+  margin-bottom: 1rem;
+  border-collapse: collapse;
+}
+
+.report-table th {
+  font-weight: 600;
+  vertical-align: middle;
+}
+
+.report-table td {
+  vertical-align: middle;
+}
+
+/* Container for the responsive table */
+.report-table-container {
+  overflow-x: auto;
+}
+
+/* Mobile responsive styles */
+@media screen and (max-width: 767px) {
+  .report-table {
+    border: 0;
+  }
+  
+  .report-table thead {
+    border: none;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+  
+  .report-table tr {
+    border-bottom: 3px solid #ddd;
+    display: block;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    border-radius: 4px;
+    padding: 0.5rem 0;
+    background-color: #fff;
+  }
+  
+  .report-table tr:nth-of-type(even) {
+    background-color: #f8f9fa;
+  }
+  
+  .report-table td {
+    border-bottom: 1px solid #ddd;
+    display: block;
+    font-size: 0.9rem;
+    text-align: right;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .report-table td::before {
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+  }
+  
+  .report-table td:last-child {
+    border-bottom: 0;
+  }
+  
+  /* Filter controls on mobile */
+  @media screen and (max-width: 576px) {
+    .report-filters > div {
+      margin-bottom: 1rem;
+    }
+    
+    .nav-tabs {
+      flex-wrap: wrap;
+    }
+    
+    .nav-tabs .nav-link {
+      width: 100%;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+    
+    .report-actions {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .report-actions button {
+      width: 100%;
+    }
+  }
+} 

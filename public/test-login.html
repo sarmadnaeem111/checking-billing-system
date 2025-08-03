@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Login - Golden Oil Billing System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      text-align: center;
+    }
+    .login-container {
+      margin-top: 100px;
+      padding: 30px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #4a89dc;
+    }
+    .form-group {
+      margin-bottom: 15px;
+      text-align: left;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      margin: 20px 0;
+      background-color: #4a89dc;
+      color: white;
+      border: none;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background-color: #3b7ddb;
+    }
+    .message {
+      margin-top: 20px;
+      padding: 10px;
+      border-radius: 4px;
+    }
+    .success {
+      background-color: #dff0d8;
+      color: #3c763d;
+      border: 1px solid #d6e9c6;
+    }
+    .error {
+      background-color: #f2dede;
+      color: #a94442;
+      border: 1px solid #ebccd1;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h1>Golden Oil Billing System</h1>
+    <h2>Test Login Page</h2>
+    <p>This is a simple test page to check if the server is working correctly.</p>
+    
+    <div id="loginForm">
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" placeholder="Enter your email">
+      </div>
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" placeholder="Enter your password">
+      </div>
+      <button class="btn" onclick="testLogin()">Login</button>
+    </div>
+    
+    <div id="message" class="message" style="display: none;"></div>
+    
+    <p>If you can see this page, it means the server is responding correctly.</p>
+    <p>Try the <a href="/">main application</a> again.</p>
+  </div>
+
+  <script>
+    function testLogin() {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const messageDiv = document.getElementById('message');
+      
+      if (!email || !password) {
+        messageDiv.className = 'message error';
+        messageDiv.innerHTML = 'Please enter both email and password';
+        messageDiv.style.display = 'block';
+        return;
+      }
+      
+      // This is just a test, so we'll show a success message
+      messageDiv.className = 'message success';
+      messageDiv.innerHTML = 'Test successful! The page is working correctly. This is not an actual login.';
+      messageDiv.style.display = 'block';
+      
+      // Log to console for debugging
+      console.log('Test login function executed successfully');
+    }
+    
+    // Log that the page loaded successfully
+    console.log('Test login page loaded successfully');
+  </script>
+</body>
+</html> 

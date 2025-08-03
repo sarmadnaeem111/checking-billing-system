@@ -1,0 +1,159 @@
+/* Responsive styles for Mark Attendance page */
+
+/* Base styles */
+.attendance-mark-table {
+  width: 100%;
+  margin-bottom: 1rem;
+  border-collapse: collapse;
+}
+
+.attendance-mark-table th {
+  font-weight: 600;
+  vertical-align: middle;
+}
+
+.attendance-mark-table td {
+  vertical-align: middle;
+  padding: 0.5rem;
+}
+
+/* Container for the responsive table */
+.attendance-mark-table-container {
+  overflow-x: auto;
+}
+
+/* Date input styling */
+.date-input {
+  width: 100%;
+  max-width: 250px;
+}
+
+/* Custom action buttons */
+.attendance-actions {
+  justify-content: flex-end;
+  width: 100%;
+}
+
+/* Mobile responsive styles */
+@media screen and (max-width: 767px) {
+  .attendance-container {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  
+  .date-input {
+    max-width: 100%;
+  }
+  
+  .attendance-mark-table {
+    border: 0;
+  }
+  
+  .attendance-mark-table thead {
+    border: none;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+  
+  .attendance-mark-table tr {
+    border-bottom: 3px solid #ddd;
+    display: block;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    border-radius: 4px;
+    padding: 0.75rem 0;
+    background-color: #fff;
+  }
+  
+  .attendance-mark-table tr:nth-of-type(even) {
+    background-color: #f8f9fa;
+  }
+  
+  .attendance-mark-table td {
+    border-bottom: 1px solid #ddd;
+    display: block;
+    font-size: 0.9rem;
+    text-align: right;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .attendance-mark-table td::before {
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+  }
+  
+  .attendance-mark-table td:last-child {
+    border-bottom: 0;
+  }
+  
+  /* Form controls on mobile */
+  .attendance-mark-table select,
+  .attendance-mark-table input,
+  .attendance-mark-table textarea {
+    width: 100%;
+    max-width: 100%;
+    display: inline-block;
+  }
+  
+  /* Button container for mobile */
+  .attendance-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1rem !important;
+    justify-content: center;
+  }
+  
+  .btn-cancel, .btn-save {
+    width: 100%;
+    margin-right: 0 !important;
+    margin-bottom: 0.5rem;
+    padding: 10px;
+    font-size: 1rem;
+  }
+  
+  /* Date selection responsiveness */
+  .card .form-control {
+    width: 100%;
+  }
+}
+
+/* Extra small devices */
+@media screen and (max-width: 575px) {
+  .container {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  
+  h2.mb-4 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem !important;
+    text-align: center;
+  }
+  
+  .card {
+    margin-bottom: 1rem !important;
+  }
+  
+  .card .card-body {
+    padding: 0.75rem;
+  }
+  
+  .form-control, .form-select {
+    font-size: 0.9rem;
+  }
+  
+  .form-select-sm, .form-control-sm {
+    height: 35px;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+  }
+} 

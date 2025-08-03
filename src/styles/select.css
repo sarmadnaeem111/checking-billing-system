@@ -1,0 +1,30 @@
+/* Custom styles for react-select to match Bootstrap */
+.basic-single .select__control {
+  min-height: 38px;
+  border-radius: 0.25rem;
+  border: 1px solid #ced4da;
+}
+
+.basic-single .select__control--is-focused {
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.basic-single .select__placeholder {
+  color: #6c757d;
+}
+
+.basic-single .select__menu {
+  z-index: 1000;
+  border-radius: 0.25rem;
+  border: 1px solid #ced4da;
+}
+
+.basic-single .select__option--is-focused {
+  background-color: #f8f9fa;
+}
+
+.basic-single .select__option--is-selected {
+  background-color: #0d6efd;
+  color: white;
+}

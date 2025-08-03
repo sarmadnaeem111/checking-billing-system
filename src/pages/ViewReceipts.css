@@ -1,0 +1,87 @@
+/* Responsive table styling */
+.receipts-table {
+  width: 100%;
+  margin-bottom: 1rem;
+  border-collapse: collapse;
+}
+
+.receipts-table th {
+  font-weight: 600;
+  vertical-align: middle;
+}
+
+.receipts-table td {
+  vertical-align: middle;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.item-column {
+  max-width: 200px;
+}
+
+.item-cell-content {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+.text-nowrap {
+  white-space: nowrap;
+}
+
+/* Mobile responsive styles */
+@media screen and (max-width: 767px) {
+  .receipts-table {
+    border: 0;
+  }
+  
+  .receipts-table thead {
+    border: none;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+  
+  .receipts-table tr {
+    border-bottom: 3px solid #ddd;
+    display: block;
+    margin-bottom: 1rem;
+  }
+  
+  .receipts-table td {
+    border-bottom: 1px solid #ddd;
+    display: block;
+    font-size: 0.9rem;
+    text-align: right;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .receipts-table td::before {
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+  }
+  
+  .receipts-table td:last-child {
+    border-bottom: 0;
+  }
+  
+  .item-cell-content {
+    white-space: normal;
+    max-width: 100%;
+  }
+  
+  .receipt-table-container {
+    overflow-x: hidden;
+  }
+} 

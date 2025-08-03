@@ -1,0 +1,129 @@
+/* General Styles */
+body {
+  background-color: #f8f9fa;
+}
+
+.App {
+  min-height: 100vh;
+}
+
+/* Cursor pointer for clickable elements */
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* Receipt Styles */
+.receipt-container {
+  background-color: white;
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.receipt-preview {
+  background-color: white;
+}
+
+.receipt-table {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.receipt-table th {
+  border-bottom: 1px solid #dee2e6;
+}
+
+.receipt-table td, .receipt-table th {
+  padding: 8px 12px;
+}
+
+/* Form Styles */
+.form-label {
+  font-weight: 500;
+}
+
+/* Dashboard Cards */
+.dashboard-card {
+  transition: transform 0.2s;
+  height: 100%;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark Mode Support */
+.dark-mode {
+  background-color: #343a40;
+  color: #f8f9fa;
+}
+
+.dark-mode .card {
+  background-color: #495057;
+  color: #f8f9fa;
+}
+
+.dark-mode .table {
+  color: #f8f9fa;
+}
+
+.dark-mode .modal-content {
+  background-color: #495057;
+  color: #f8f9fa;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .receipt-container {
+    padding: 10px;
+  }
+  
+  .receipt-table td, .receipt-table th {
+    padding: 6px 8px;
+    font-size: 0.9rem;
+  }
+}
+
+/* RTL language support */
+.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+.rtl .nav-link, 
+.rtl .navbar-brand, 
+.rtl .dropdown-item {
+  text-align: right;
+}
+
+.rtl .ms-2 {
+  margin-right: 0.5rem !important;
+  margin-left: 0 !important;
+}
+
+.rtl .me-2 {
+  margin-left: 0.5rem !important;
+  margin-right: 0 !important;
+}
+
+.rtl .me-auto {
+  margin-left: auto !important;
+  margin-right: 0 !important;
+}
+
+.rtl .ms-auto {
+  margin-right: auto !important;
+  margin-left: 0 !important;
+}
+
+.rtl .dropdown-menu {
+  text-align: right;
+  left: auto;
+  right: 0;
+}
+
+/* Flip Bootstrap icons in RTL mode */
+.rtl .bi {
+  transform: scaleX(-1);
+}
