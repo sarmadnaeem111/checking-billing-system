@@ -210,11 +210,14 @@ export const calculateSalesAndProfit = async (receipts, shopId = null, stockItem
       let category = 'Uncategorized';
       
       // If cost price is not available in the receipt, try to get it from cached stock items
-      if ((costPrice <= 0 || isNaN(costPrice)) && item.name) {
+      if (item.name) {
         const stockItem = stockItems[item.name.toLowerCase()];
         if (stockItem) {
           costPrice = stockItem.costPrice || 0;
-          category = stockItem.category || 'Uncategorized';
+          category = stockItem.category || (item.category || 'Uncategorized');
+        } else if (item.category) {
+          // Use the category from the receipt item if available
+          category = item.category;
         }
       }
       
@@ -258,14 +261,16 @@ export const calculateSalesAndProfit = async (receipts, shopId = null, stockItem
         const returnQuantity = parseFloat(returnedItem.quantity || 0);
         const returnPrice = parseFloat(returnedItem.price || 0);
         let returnCostPrice = parseFloat(returnedItem.costPrice || 0);
+        // Use category from returned item if available, otherwise default to 'Uncategorized'
         let returnCategory = returnedItem.category || 'Uncategorized';
         
         // If cost price is not available in the returned item, try to get it from cached stock items
-        if ((returnCostPrice <= 0 || isNaN(returnCostPrice)) && returnedItem.name) {
+        if (returnedItem.name) {
           const stockItem = stockItems[returnedItem.name.toLowerCase()];
           if (stockItem) {
             returnCostPrice = stockItem.costPrice || 0;
-            returnCategory = stockItem.category || 'Uncategorized';
+            // Keep returned item category if stock item category is not available
+            returnCategory = stockItem.category || returnCategory;
           }
         }
         
