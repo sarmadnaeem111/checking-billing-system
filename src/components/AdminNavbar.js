@@ -5,6 +5,7 @@ import { useAdmin } from '../contexts/AdminContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import LanguageToggle from './LanguageToggle';
 import Translate from './Translate';
+import AdminNotifications from './AdminNotifications';
 
 const AdminNavbar = () => {
   const { adminUser, adminLogout } = useAdmin();
@@ -46,11 +47,17 @@ const AdminNavbar = () => {
           </Button>
           
           <div className="d-none d-lg-flex align-items-center">
-            <LanguageToggle />
             {adminUser && (
-              <Button variant="outline-light" onClick={handleLogout} className="ms-2">
-                <Translate textKey="logout" />
-              </Button>
+              <>
+                <AdminNotifications />
+                <LanguageToggle className="ms-2" />
+                <Button variant="outline-light" onClick={handleLogout} className="ms-2">
+                  <Translate textKey="logout" />
+                </Button>
+              </>
+            )}
+            {!adminUser && (
+              <LanguageToggle />
             )}
           </div>
         </Container>
@@ -88,18 +95,23 @@ const AdminNavbar = () => {
               <Translate textKey="manageUsers" fallback="Manage Users" />
             </Nav.Link>
             <hr className="bg-secondary" />
-            <div className="d-flex mt-3">
-              <LanguageToggle />
-              <Button 
-                variant="outline-danger" 
-                onClick={() => {
-                  handleLogout();
-                  handleClose();
-                }}
-                className="ms-2"
-              >
-                <Translate textKey="logout" />
-              </Button>
+            <div className="mt-3">
+              <div className="d-flex align-items-center mb-3">
+                <AdminNotifications />
+              </div>
+              <div className="d-flex">
+                <LanguageToggle />
+                <Button 
+                  variant="outline-danger" 
+                  onClick={() => {
+                    handleLogout();
+                    handleClose();
+                  }}
+                  className="ms-2"
+                >
+                  <Translate textKey="logout" />
+                </Button>
+              </div>
             </div>
           </Nav>
         </Offcanvas.Body>
@@ -135,4 +147,4 @@ const AdminNavbar = () => {
   );
 };
 
-export default AdminNavbar; 
+export default AdminNavbar;
