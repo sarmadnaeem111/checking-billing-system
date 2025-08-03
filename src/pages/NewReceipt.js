@@ -14,7 +14,7 @@ import '../styles/select.css'; // Import custom styles for react-select
 
 const NewReceipt = () => {
   const { currentUser, shopData } = useAuth();
-  const [items, setItems] = useState([{ name: '', price: '', quantity: '1', costPrice: '0', quantityUnit: 'units' }]);
+  const [items, setItems] = useState([{ name: '', price: '', quantity: '1', costPrice: '0', quantityUnit: 'units', category: 'Uncategorized' }]);
   const [cashierName, setCashierName] = useState('');
   const [managerName, setManagerName] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('Cash');
@@ -170,11 +170,14 @@ const NewReceipt = () => {
         newItems[index].costPrice = matchingItem.costPrice ? matchingItem.costPrice.toString() : '0';
         // Store the quantityUnit
         newItems[index].quantityUnit = matchingItem.quantityUnit || 'units';
+        // Store the category for sales analytics
+        newItems[index].category = matchingItem.category || 'Uncategorized';
         
         // Log the matched item and cost price (only in development)
         if (process.env.NODE_ENV === 'development') {
           console.log('Found matching item:', matchingItem.name);
           console.log('Price:', matchingItem.price, 'Cost Price:', matchingItem.costPrice);
+          console.log('Category:', matchingItem.category || 'Uncategorized');
         }
       }
     }
@@ -211,7 +214,7 @@ const NewReceipt = () => {
 
   // Add a new item row
   const addItem = () => {
-    setItems([...items, { name: '', price: '', quantity: '1', costPrice: '0', quantityUnit: 'units' }]);
+    setItems([...items, { name: '', price: '', quantity: '1', costPrice: '0', quantityUnit: 'units', category: 'Uncategorized' }]);
   };
 
   // Remove an item row
