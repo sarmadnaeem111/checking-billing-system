@@ -281,6 +281,7 @@ const ViewReceipt = () => {
                     <thead>
                       <tr>
                         <th>Item</th>
+                        <th>Category</th>
                         <th className="text-end">Price</th>
                         <th className="text-center">Qty</th>
                         <th className="text-end">Total</th>
@@ -290,6 +291,7 @@ const ViewReceipt = () => {
                       {receipt.items.map((item, index) => (
                         <tr key={index}>
                           <td>{item.name}</td>
+                          <td>{item.category || 'Uncategorized'}</td>
                           <td className="text-end">{formatCurrency(item.price)}</td>
                           <td className="text-center">
                             {item.quantity} {item.quantityUnit === 'kg' ? 'KG' : ''}
