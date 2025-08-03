@@ -199,17 +199,41 @@ export function AuthProvider({ children }) {
         
         // If this is the first time signing in with Google
         if (!userDoc.exists()) {
-          // Create a new shop document for this Google user
+          // Create a new shop document for this Google user with pending status
           await setDoc(userRef, {
             userEmail: user.email,
             displayName: user.displayName || '',
             photoURL: user.photoURL || '',
             createdAt: new Date().toISOString(),
             lastLoginAt: new Date().toISOString(),
-            accountStatus: 'active',
-            authProvider: 'google'
+            accountStatus: 'pending', // Set to pending for admin approval
+            authProvider: 'google',
+            registrationDate: new Date().toISOString()
           });
+          
+          // Create a notification for admins
+          const notificationRef = doc(collection(db, 'adminNotifications'));
+          await setDoc(notificationRef, {
+            type: 'new_google_user',
+            userId: user.uid,
+            userEmail: user.email,
+            userName: user.displayName || '',
+            createdAt: new Date().toISOString(),
+            read: false
+          });
+          
+          // Throw an error to inform the user that approval is pending
+          throw new Error('Your account is pending approval by an administrator. You will be notified once approved.');
         } else {
+          // Check if the account is already approved
+          if (userDoc.data().accountStatus === 'pending') {
+            throw new Error('Your account is still pending approval by an administrator.');
+          } else if (userDoc.data().accountStatus === 'rejected') {
+            throw new Error('Your account has been rejected. Please contact the administrator.');
+          } else if (userDoc.data().accountStatus === 'frozen') {
+            throw new Error('Your account has been frozen. Please contact the administrator.');
+          }
+          
           // Update last login time
           await updateDoc(userRef, {
             lastLoginAt: new Date().toISOString()
