@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { AdminProvider } from './contexts/AdminContext';
@@ -7,41 +7,55 @@ import { useLanguage } from './contexts/LanguageContext';
 import PrivateRoute from './components/PrivateRoute';
 import AdminPrivateRoute from './components/AdminPrivateRoute';
 import ErrorBoundary from './components/ErrorBoundary';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Dashboard from './pages/Dashboard';
-import NewReceipt from './pages/NewReceipt';
-import ViewReceipts from './pages/ViewReceipts';
-import ViewReceipt from './pages/ViewReceipt';
-import EditReceipt from './pages/EditReceipt';
-import ReturnProducts from './pages/ReturnProducts';
-import ViewStock from './pages/ViewStock';
-import AddStockItem from './pages/AddStockItem';
-import EditStockItem from './pages/EditStockItem';
-import Employees from './pages/Employees';
-import AddEmployee from './pages/AddEmployee';
-import EditEmployee from './pages/EditEmployee';
-import Attendance from './pages/Attendance';
-import MarkAttendance from './pages/MarkAttendance';
-import AttendanceReport from './pages/AttendanceReport';
-import Settings from './pages/Settings';
-import AdminLogin from './pages/AdminLogin';
-import AdminDashboard from './pages/AdminDashboard';
-import AdminPendingUsers from './pages/AdminPendingUsers';
-import AdminManageUsers from './pages/AdminManageUsers';
-import SalesAnalytics from './pages/SalesAnalytics';
-import SalaryManagement from './pages/SalaryManagement';
-import AddSalaryPayment from './pages/AddSalaryPayment';
-import EditSalaryPayment from './pages/EditSalaryPayment';
-import SalaryReports from './pages/SalaryReports';
-import Expenses from './pages/Expenses';
-import AddExpense from './pages/AddExpense';
-import EditExpense from './pages/EditExpense';
-import ExpenseCategories from './pages/ExpenseCategories';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
+// Eagerly loaded components (critical for initial render)
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
+
+// Lazily loaded components (loaded on demand)
+const NewReceipt = lazy(() => import('./pages/NewReceipt'));
+const ViewReceipts = lazy(() => import('./pages/ViewReceipts'));
+const ViewReceipt = lazy(() => import('./pages/ViewReceipt'));
+const EditReceipt = lazy(() => import('./pages/EditReceipt'));
+const ReturnProducts = lazy(() => import('./pages/ReturnProducts'));
+const ViewStock = lazy(() => import('./pages/ViewStock'));
+const AddStockItem = lazy(() => import('./pages/AddStockItem'));
+const EditStockItem = lazy(() => import('./pages/EditStockItem'));
+const Employees = lazy(() => import('./pages/Employees'));
+const AddEmployee = lazy(() => import('./pages/AddEmployee'));
+const EditEmployee = lazy(() => import('./pages/EditEmployee'));
+const Attendance = lazy(() => import('./pages/Attendance'));
+const MarkAttendance = lazy(() => import('./pages/MarkAttendance'));
+const AttendanceReport = lazy(() => import('./pages/AttendanceReport'));
+const Settings = lazy(() => import('./pages/Settings'));
+const AdminLogin = lazy(() => import('./pages/AdminLogin'));
+const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
+const AdminPendingUsers = lazy(() => import('./pages/AdminPendingUsers'));
+const AdminManageUsers = lazy(() => import('./pages/AdminManageUsers'));
+const SalesAnalytics = lazy(() => import('./pages/SalesAnalytics'));
+const SalaryManagement = lazy(() => import('./pages/SalaryManagement'));
+const AddSalaryPayment = lazy(() => import('./pages/AddSalaryPayment'));
+const EditSalaryPayment = lazy(() => import('./pages/EditSalaryPayment'));
+const SalaryReports = lazy(() => import('./pages/SalaryReports'));
+const Expenses = lazy(() => import('./pages/Expenses'));
+const AddExpense = lazy(() => import('./pages/AddExpense'));
+const EditExpense = lazy(() => import('./pages/EditExpense'));
+const ExpenseCategories = lazy(() => import('./pages/ExpenseCategories'));
+
 // Wrapper component to apply RTL class based on language
+// Loading fallback component
+const LoadingFallback = () => (
+  <div className="text-center p-5">
+    <div className="spinner-border" role="status">
+      <span className="visually-hidden">Loading...</span>
+    </div>
+    <p className="mt-3">Loading content...</p>
+  </div>
+);
+
 function AppContent() {
   const { language } = useLanguage();
   const isRTL = language === 'ur';
@@ -73,35 +87,45 @@ function AppContent() {
           <Route path="/new-receipt" element={
             <ErrorBoundary>
               <PrivateRoute>
-                <NewReceipt />
+                <Suspense fallback={<LoadingFallback />}>
+                  <NewReceipt />
+                </Suspense>
               </PrivateRoute>
             </ErrorBoundary>
           } />
           <Route path="/receipts" element={
             <ErrorBoundary>
               <PrivateRoute>
-                <ViewReceipts />
+                <Suspense fallback={<LoadingFallback />}>
+                  <ViewReceipts />
+                </Suspense>
               </PrivateRoute>
             </ErrorBoundary>
           } />
           <Route path="/receipt/:id" element={
             <ErrorBoundary>
               <PrivateRoute>
-                <ViewReceipt />
+                <Suspense fallback={<LoadingFallback />}>
+                  <ViewReceipt />
+                </Suspense>
               </PrivateRoute>
             </ErrorBoundary>
           } />
           <Route path="/edit-receipt/:id" element={
             <ErrorBoundary>
               <PrivateRoute>
-                <EditReceipt />
+                <Suspense fallback={<LoadingFallback />}>
+                  <EditReceipt />
+                </Suspense>
               </PrivateRoute>
             </ErrorBoundary>
           } />
           <Route path="/return-products/:id" element={
             <ErrorBoundary>
               <PrivateRoute>
-                <ReturnProducts />
+                <Suspense fallback={<LoadingFallback />}>
+                  <ReturnProducts />
+                </Suspense>
               </PrivateRoute>
             </ErrorBoundary>
           } />
@@ -109,7 +133,9 @@ function AppContent() {
           <Route path="/sales-analytics" element={
             <ErrorBoundary>
               <PrivateRoute>
-                <SalesAnalytics />
+                <Suspense fallback={<LoadingFallback />}>
+                  <SalesAnalytics />
+                </Suspense>
               </PrivateRoute>
             </ErrorBoundary>
           } />
@@ -117,21 +143,27 @@ function AppContent() {
           <Route path="/stock" element={
             <ErrorBoundary>
               <PrivateRoute>
-                <ViewStock />
+                <Suspense fallback={<LoadingFallback />}>
+                  <ViewStock />
+                </Suspense>
               </PrivateRoute>
             </ErrorBoundary>
           } />
           <Route path="/add-stock" element={
             <ErrorBoundary>
               <PrivateRoute>
-                <AddStockItem />
+                <Suspense fallback={<LoadingFallback />}>
+                  <AddStockItem />
+                </Suspense>
               </PrivateRoute>
             </ErrorBoundary>
           } />
           <Route path="/edit-stock/:id" element={
             <ErrorBoundary>
               <PrivateRoute>
-                <EditStockItem />
+                <Suspense fallback={<LoadingFallback />}>
+                  <EditStockItem />
+                </Suspense>
               </PrivateRoute>
             </ErrorBoundary>
           } />
@@ -139,21 +171,27 @@ function AppContent() {
           <Route path="/employees" element={
             <ErrorBoundary>
               <PrivateRoute>
-                <Employees />
+                <Suspense fallback={<LoadingFallback />}>
+                  <Employees />
+                </Suspense>
               </PrivateRoute>
             </ErrorBoundary>
           } />
           <Route path="/add-employee" element={
             <ErrorBoundary>
               <PrivateRoute>
-                <AddEmployee />
+                <Suspense fallback={<LoadingFallback />}>
+                  <AddEmployee />
+                </Suspense>
               </PrivateRoute>
             </ErrorBoundary>
           } />
           <Route path="/edit-employee/:id" element={
             <ErrorBoundary>
               <PrivateRoute>
-                <EditEmployee />
+                <Suspense fallback={<LoadingFallback />}>
+                  <EditEmployee />
+                </Suspense>
               </PrivateRoute>
             </ErrorBoundary>
           } />
@@ -161,28 +199,36 @@ function AppContent() {
           <Route path="/salary-management" element={
             <ErrorBoundary>
               <PrivateRoute>
-                <SalaryManagement />
+                <Suspense fallback={<LoadingFallback />}>
+                  <SalaryManagement />
+                </Suspense>
               </PrivateRoute>
             </ErrorBoundary>
           } />
           <Route path="/add-salary-payment" element={
             <ErrorBoundary>
               <PrivateRoute>
-                <AddSalaryPayment />
+                <Suspense fallback={<LoadingFallback />}>
+                  <AddSalaryPayment />
+                </Suspense>
               </PrivateRoute>
             </ErrorBoundary>
           } />
           <Route path="/edit-salary-payment/:id" element={
             <ErrorBoundary>
               <PrivateRoute>
-                <EditSalaryPayment />
+                <Suspense fallback={<LoadingFallback />}>
+                  <EditSalaryPayment />
+                </Suspense>
               </PrivateRoute>
             </ErrorBoundary>
           } />
           <Route path="/salary-reports" element={
             <ErrorBoundary>
               <PrivateRoute>
-                <SalaryReports />
+                <Suspense fallback={<LoadingFallback />}>
+                  <SalaryReports />
+                </Suspense>
               </PrivateRoute>
             </ErrorBoundary>
           } />
@@ -190,21 +236,27 @@ function AppContent() {
           <Route path="/attendance" element={
             <ErrorBoundary>
               <PrivateRoute>
-                <Attendance />
+                <Suspense fallback={<LoadingFallback />}>
+                  <Attendance />
+                </Suspense>
               </PrivateRoute>
             </ErrorBoundary>
           } />
           <Route path="/mark-attendance" element={
             <ErrorBoundary>
               <PrivateRoute>
-                <MarkAttendance />
+                <Suspense fallback={<LoadingFallback />}>
+                  <MarkAttendance />
+                </Suspense>
               </PrivateRoute>
             </ErrorBoundary>
           } />
           <Route path="/attendance-report" element={
             <ErrorBoundary>
               <PrivateRoute>
-                <AttendanceReport />
+                <Suspense fallback={<LoadingFallback />}>
+                  <AttendanceReport />
+                </Suspense>
               </PrivateRoute>
             </ErrorBoundary>
           } />
@@ -213,28 +265,36 @@ function AppContent() {
           <Route path="/expenses" element={
             <ErrorBoundary>
               <PrivateRoute>
-                <Expenses />
+                <Suspense fallback={<LoadingFallback />}>
+                  <Expenses />
+                </Suspense>
               </PrivateRoute>
             </ErrorBoundary>
           } />
           <Route path="/add-expense" element={
             <ErrorBoundary>
               <PrivateRoute>
-                <AddExpense />
+                <Suspense fallback={<LoadingFallback />}>
+                  <AddExpense />
+                </Suspense>
               </PrivateRoute>
             </ErrorBoundary>
           } />
           <Route path="/edit-expense/:id" element={
             <ErrorBoundary>
               <PrivateRoute>
-                <EditExpense />
+                <Suspense fallback={<LoadingFallback />}>
+                  <EditExpense />
+                </Suspense>
               </PrivateRoute>
             </ErrorBoundary>
           } />
           <Route path="/expense-categories" element={
             <ErrorBoundary>
               <PrivateRoute>
-                <ExpenseCategories />
+                <Suspense fallback={<LoadingFallback />}>
+                  <ExpenseCategories />
+                </Suspense>
               </PrivateRoute>
             </ErrorBoundary>
           } />
@@ -243,7 +303,9 @@ function AppContent() {
           <Route path="/settings" element={
             <ErrorBoundary>
               <PrivateRoute>
-                <Settings />
+                <Suspense fallback={<LoadingFallback />}>
+                  <Settings />
+                </Suspense>
               </PrivateRoute>
             </ErrorBoundary>
           } />
@@ -251,27 +313,35 @@ function AppContent() {
           {/* Admin Routes */}
           <Route path="/admin/login" element={
             <ErrorBoundary>
-              <AdminLogin />
+              <Suspense fallback={<LoadingFallback />}>
+                <AdminLogin />
+              </Suspense>
             </ErrorBoundary>
           } />
           <Route path="/admin/dashboard" element={
             <ErrorBoundary>
               <AdminPrivateRoute>
-                <AdminDashboard />
+                <Suspense fallback={<LoadingFallback />}>
+                  <AdminDashboard />
+                </Suspense>
               </AdminPrivateRoute>
             </ErrorBoundary>
           } />
           <Route path="/admin/pending-users" element={
             <ErrorBoundary>
               <AdminPrivateRoute>
-                <AdminPendingUsers />
+                <Suspense fallback={<LoadingFallback />}>
+                  <AdminPendingUsers />
+                </Suspense>
               </AdminPrivateRoute>
             </ErrorBoundary>
           } />
           <Route path="/admin/users" element={
             <ErrorBoundary>
               <AdminPrivateRoute>
-                <AdminManageUsers />
+                <Suspense fallback={<LoadingFallback />}>
+                  <AdminManageUsers />
+                </Suspense>
               </AdminPrivateRoute>
             </ErrorBoundary>
           } />
